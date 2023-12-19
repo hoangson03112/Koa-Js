@@ -44,11 +44,14 @@ function limit(id) {
 function sort(type) {
   if (type === 'asc' || type === 'desc') {
     const sortedProducts = [...products].sort((a, b) => {
-      return type === 'asc' ? new Date(a.createdAt) - new Date(b.createdAt) : new Date(b.createdAt) - new Date(a.createdAt);
-    });
-
+      if (type === 'asc') {
+          return a.createdAt.localeCompare(b.createdAt);
+      } else {
+          return b.createdAt.localeCompare(a.createdAt);
+      }
+  });
     return sortedProducts;
-  } else {
+  }else{
     ctx.status = 400;
     ctx.body = { error: 'Invalid sort parameter' };
   }

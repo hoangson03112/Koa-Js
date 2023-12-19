@@ -119,8 +119,6 @@ async function getProductsCondition(ctx) {
   try {
 
     const { limit, sort } = ctx.request.query;
-    console.log(limit);
-    console.log(sort);
     if (limit) {
       ctx.status = 201;
       ctx.body = {

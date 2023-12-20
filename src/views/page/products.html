@@ -1,0 +1,32 @@
+
+     <div class="jumbotron text-center">
+          <h1>Products</h1>
+        </div>
+          
+        <div class="container"> 
+          <table border="1" class="text-center">
+               <tr class="bg-primary" >
+                   <th>Id</th>
+                   <th>name</th>
+                   <th>price</th>
+                   <th>description</th>
+                   <th>color</th>
+                   <th>createdAt</th>
+                   <th>image</th>
+                            
+               </tr>
+               <% for(var i=0; i<products.length; i++) {%>
+                         <tr>
+                             <td><%= products[i].id %></td>
+                             <td><%= products[i].name %></td>
+                             <td><%= products[i].price %></td>
+                             <td><%= products[i].description %></td>
+                             <td><%= products[i].color %></td>
+                             <td><%= products[i].createdAt %></td>
+                             <td><%= products[i].image %></td>    
+                         </tr>
+                 <% } %>
+            
+          </div>
+        </div>
+        

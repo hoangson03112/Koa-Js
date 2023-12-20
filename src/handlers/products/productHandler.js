@@ -14,7 +14,7 @@ const {
  * @param ctx
  * @returns {Promise<void>}
  */
-async function getProducts(ctx) {
+ function getProducts(ctx) {
   try {
     const products = getAllProducts();
     ctx.body = {
@@ -35,7 +35,7 @@ async function getProducts(ctx) {
  * @param ctx
  * @returns {Promise<{data: {author: string, name: string, id: number}}|{success: boolean, error: *}|{message: string, status: string}>}
  */
-async function getProduct(ctx) {
+ function getProduct(ctx) {
   try {
     const { id } = ctx.params;
     const getCurrentBook = getOneProduct(id);
@@ -60,7 +60,7 @@ async function getProduct(ctx) {
  * @param ctx
  * @returns {Promise<{success: boolean, error: *}|{success: boolean}>}
  */
-async function save(ctx) {
+ function save(ctx) {
   try {
     const contentRequest = ctx.request.body;
     const postData = {
@@ -81,7 +81,7 @@ async function save(ctx) {
   }
 }
 
-async function updatedProduct(ctx) {
+ function updatedProduct(ctx) {
   try {
     const { id } = ctx.params;
 
@@ -99,7 +99,7 @@ async function updatedProduct(ctx) {
     });
   }
 }
-async function deletedProduct(ctx) {
+ function deletedProduct(ctx) {
   try {
     const { id } = ctx.params;
     deleteProduct(id);
@@ -115,7 +115,7 @@ async function deletedProduct(ctx) {
   }
 }
 
-async function getProductsCondition(ctx) {
+ function getProductsCondition(ctx) {
   try {
 
     const { limit, sort } = ctx.request.query;

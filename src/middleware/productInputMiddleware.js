@@ -1,6 +1,6 @@
 const yup = require('yup');
 
-async function productInputMiddlewareCreate(ctx, next) {
+async function productInputMiddlewareCreate(ctx) {
   try {
     const postData = ctx.request.body;
     let schema = yup.object().shape({
@@ -14,7 +14,7 @@ async function productInputMiddlewareCreate(ctx, next) {
     });
 
     await schema.validate(postData);
-    next();
+ 
   } catch (e) {
     ctx.status = 400;
     ctx.body = {
@@ -26,7 +26,7 @@ async function productInputMiddlewareCreate(ctx, next) {
 
 }
 
-async function productInputMiddlewareUpdate(ctx, next) {
+async function productInputMiddlewareUpdate(ctx ) {
   try {
     const postData = ctx.request.body;
     let schema = yup.object().shape({
@@ -40,7 +40,7 @@ async function productInputMiddlewareUpdate(ctx, next) {
     });
 
     await schema.validate(postData);
-    next();
+
   } catch (e) {
     ctx.status = 400;
     ctx.body = {

@@ -2,12 +2,26 @@
 const { data: products } = require("./products.json");
 const writeFile = require('../func/function');
 
+
+function pick(object, keys) {
+  return keys.reduce((obj, key) => {
+     if (object && object.hasOwnProperty(key)) {
+        obj[key] = object[key];
+     }
+     return obj;
+   }, {});
+}
 function getAll() {
   return products;
 }
 
-function getOne(id) {
-  return products.find((product) => product.id === parseInt(id));
+function getOne(id,fields) {
+          if(fields){
+              const field= fields.split(",")
+              const product=products.find((product) => product.id === parseInt(id));
+              return  pick(product,field);
+          }
+    return products.find((product) => product.id === parseInt(id));        
 }
 
 function add(data) {
@@ -38,10 +52,10 @@ function dele(id) {
   return writeFile(deleProduct);
 
 }
-function limit(id) {
-  return products.slice(0, parseInt(id));
+function limitProducts(id,list) {
+  return list.slice(0, parseInt(id));
 }
-function sort(type) {
+function sortProducts(type) {
   if (type === 'asc' || type === 'desc') {
     const sortedProducts = [...products].sort((a, b) => {
       if (type === 'asc') {
@@ -56,15 +70,28 @@ function sort(type) {
     ctx.body = { error: 'Invalid sort parameter' };
   }
 
-
+}
+function getProductsList({limit, sort}) {
+  if (limit !== undefined && sort !== undefined) {
+       const listSorted = sortProducts(sort);
+      return limitProducts(limit, listSorted);
+  }
+  if(sort){
+      return sortProducts(sort);
+  }
+  if(limit){
+      return limitProducts(limit,getAll())
+  }
 
 }
+
+
 module.exports = {
   getOne,
   getAll,
   add,
   update,
   dele,
-  limit,
-  sort
+  getProductsList,
+
 };

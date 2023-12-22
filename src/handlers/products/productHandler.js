@@ -1,20 +1,15 @@
-const { date } = require("yup");
+
 const {
   getAll: getAllProducts,
   getOne: getOneProduct,
   add: addProduct,
   update: updateProduct,
   dele: deleteProduct,
-  limit: limitProducts,
-  sort: sortProducts
+  getProductsList:getProductsList,
+
 } = require("../../database/bookRepository");
 
-/**
- *
- * @param ctx
- * @returns {Promise<void>}
- */
- function getProducts(ctx) {
+function getProducts(ctx) {
   try {
     const products = getAllProducts();
     ctx.body = {
@@ -30,15 +25,14 @@ const {
   }
 }
 
-/**
- *
- * @param ctx
- * @returns {Promise<{data: {author: string, name: string, id: number}}|{success: boolean, error: *}|{message: string, status: string}>}
- */
- function getProduct(ctx) {
+
+function getProduct(ctx) {
   try {
     const { id } = ctx.params;
-    const getCurrentBook = getOneProduct(id);
+    const {fields}= ctx.request.query;
+   
+    
+    const getCurrentBook = getOneProduct(id,fields);
     if (getCurrentBook) {
       return (ctx.body = {
         data: getCurrentBook,
@@ -55,12 +49,8 @@ const {
   }
 }
 
-/**
- *
- * @param ctx
- * @returns {Promise<{success: boolean, error: *}|{success: boolean}>}
- */
- function save(ctx) {
+
+function save(ctx) {
   try {
     const contentRequest = ctx.request.body;
     const postData = {
@@ -81,7 +71,7 @@ const {
   }
 }
 
- function updatedProduct(ctx) {
+function updatedProduct(ctx) {
   try {
     const { id } = ctx.params;
 
@@ -99,11 +89,11 @@ const {
     });
   }
 }
- function deletedProduct(ctx) {
+function deletedProduct(ctx) {
   try {
     const { id } = ctx.params;
     deleteProduct(id);
-    ctx.status = 201;
+    ctx.status = 200;
     return (ctx.body = {
       success: true,
     });
@@ -115,22 +105,29 @@ const {
   }
 }
 
- function getProductsCondition(ctx) {
+function getProductsCondition(ctx) {
+  try {
+    const {limit,sort} = ctx.request.query;
+    
+
+    const products = getProductsList({limit, sort});
+    return (ctx.body = {
+      data: products,
+    });
+    
+  } catch (e) {
+    return (ctx.body = {
+      success: false,
+      error: e.message,
+    });
+  }
+}
+
+async function renderAllProducts(ctx) {
   try {
 
-    const { limit, sort } = ctx.request.query;
-    if (limit) {
-      ctx.status = 201;
-      ctx.body = {
-        data: limitProducts(limit),
-      };
-    } else {
-      ctx.status = 201;
-      ctx.body = {
-        data: sortProducts(sort),
-      };
-    }
-
+    const products = getAllProducts();
+    await ctx.render("page/products", { products });
 
   } catch (e) {
     return (ctx.body = {
@@ -140,8 +137,19 @@ const {
   }
 }
 
+async function renderProductById(ctx) {
+  try {
+    const { id } = ctx.params;
+    const product = getOneProduct(id);
+    await ctx.render("page/product", { product });
 
-
+  } catch (e) {
+    return (ctx.body = {
+      success: false,
+      error: e.message,
+    });
+  }
+}
 
 module.exports = {
   getProducts,
@@ -149,5 +157,8 @@ module.exports = {
   save,
   updatedProduct,
   deletedProduct,
-  getProductsCondition
+  getProductsCondition,
+  renderAllProducts,
+  renderProductById,
+  
 };

@@ -58,7 +58,6 @@ function save(ctx) {
       , createdAt: new Date()
     }
     addProduct(postData);
-
     ctx.status = 201;
     return (ctx.body = {
       success: true,
@@ -94,7 +93,7 @@ function deletedProduct(ctx) {
     const { id } = ctx.params;
     deleteProduct(id);
     ctx.status = 200;
-    return (ctx.body = {
+    return (ctx.body ={
       success: true,
     });
   } catch (e) {
@@ -127,7 +126,7 @@ async function renderAllProducts(ctx) {
   try {
 
     const products = getAllProducts();
-    await ctx.render("page/products", { products });
+    await ctx.render("page/products", {products });
 
   } catch (e) {
     return (ctx.body = {
